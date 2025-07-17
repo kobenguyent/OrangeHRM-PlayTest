@@ -37,7 +37,7 @@ jobs:
       - name: Run tests and generate allure reports
         run: |
           npm i && npx playwright install
-          npm run test:allure
+          npm run test:chrome ; npm run allure:generate
       - name: Get Allure history
         uses: actions/checkout@v2
         if: always()
