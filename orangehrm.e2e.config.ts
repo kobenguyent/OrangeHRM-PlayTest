@@ -20,7 +20,7 @@ const config: PlaywrightTestConfig = {
         viewport: { width: 1280, height: 720 }, // set the viewport size
         ignoreHTTPSErrors: true, // ignore HTTPS errors
         video: 'off',
-        screenshot: 'off',
+        screenshot: 'on',
         trace: 'on-first-retry',
         baseURL: process.env.BASE_URL || 'https://opensource-demo.orangehrmlive.com',
     },
