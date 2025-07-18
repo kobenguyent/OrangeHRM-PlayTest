@@ -35,6 +35,8 @@ export class ViewEmployeeListPage {
   async searchByEmployeeName(name: string): Promise<void> {
     await this.employeeNameInput.fill(name)
 
+    // Wait for autocomplete options to render
+    await this.page.waitForTimeout(3000)
     // If autocomplete option appears, click it
     const option = this.nameOption(name)
     if (await option.isVisible()) {

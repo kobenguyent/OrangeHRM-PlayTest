@@ -9,7 +9,7 @@ export type EmployeeInfo = {
 
 export function generateEmployeeInfo(): EmployeeInfo {
   return {
-    firstName: faker.person.firstName(),
+    firstName: faker.person.firstName() + Date.now().toString(),
     middleName: faker.person.middleName(),
     lastName: faker.person.lastName(),
     employeeId: faker.string.alphanumeric(6).toUpperCase(),
