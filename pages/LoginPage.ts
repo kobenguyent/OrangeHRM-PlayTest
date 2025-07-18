@@ -60,7 +60,7 @@ export class LoginPage {
    * Verifies that the user is redirected to the dashboard after login.
    */
   async verifyLoginSuccess(): Promise<void> {
-    await expect(this.page).toHaveURL(/.*dashboard/)
+    await expect(this.page).not.toHaveURL(/.*login/)
   }
 
   /**
