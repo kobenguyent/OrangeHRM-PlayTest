@@ -41,14 +41,14 @@ const config: PlaywrightTestConfig = {
   ],
 }
 
-if (process.env.QASE_TOKEN) {
+if (process.env.QASE_API_TOKEN) {
   config.reporter = [[
     'playwright-qase-reporter',
     {
       mode: 'testops',
       testops: {
         api: {
-          token: process.env.QASE_TOKEN,
+          token: process.env.QASE_API_TOKEN,
         },
         project: 'ORANGEHRM',
         uploadAttachments: true,
