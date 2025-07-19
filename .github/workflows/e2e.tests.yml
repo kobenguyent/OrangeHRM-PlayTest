@@ -85,6 +85,18 @@ jobs:
             -d '{"is_public": true}' \
             "https://api.qase.io/v1/run/$QASE_PROJECT_CODE/$QASE_RUN_ID"
 
+      - name: Update Qase badge in README.md
+        if: always()
+        run: |
+          # Replace Qase badge link in README
+          sed -i "s|https://app.qase.io/run/$QASE_PROJECT_CODE/dashboard/[0-9]*|https://app.qase.io/run/$QASE_PROJECT_CODE/dashboard/$QASE_RUN_ID|" README.md
+
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add README.md
+          git commit -m "Update Qase badge to run $QASE_RUN_ID" || echo "No changes to commit"
+          git push origin HEAD:master
+
       - name: Get Allure history
         uses: actions/checkout@v2
         if: always()
