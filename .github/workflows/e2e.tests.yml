@@ -95,7 +95,7 @@ jobs:
           git config --global user.name "GitHub Actions"
           git add README.md
           git commit -m "Update Qase badge to run $QASE_RUN_ID" || echo "No changes to commit"
-          git push origin HEAD:master
+          git push origin HEAD:main
 
       - name: Get Allure history
         uses: actions/checkout@v2
