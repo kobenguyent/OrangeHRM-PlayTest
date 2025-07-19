@@ -11,7 +11,7 @@ This project follows the **Page Object Model** structure and uses **Playwright T
 ---
 
 ## 📁 Project Structure
-
+```
 OrangeHRM-PlayTest/
 ├── tests/                  # Test specs (with subfolders like login, search, etc.)
 ├── pages/                  # Page Object Models
@@ -19,7 +19,7 @@ OrangeHRM-PlayTest/
 ├── playwright.config.ts    # Playwright configuration
 ├── .github/workflows/      # GitHub Actions CI setup
 └── …
-
+```
 ---
 
 ## 🚀 Getting Started
@@ -41,7 +41,7 @@ Then generate and open the Allure report:
 
 npx allure generate ./allure-results --clean -o ./allure-report
 npx allure open ./allure-report
-
+```
 
 ⸻
 
@@ -61,7 +61,7 @@ The CI workflow:
 	•	Runs all Playwright tests
 	•	Publishes Allure report to the gh-pages branch
 
-See the workflow file in .github/workflows/e2e.yml.
+See the workflow file in .github/workflows/e2e.tests.yml.
 
 ⸻
 
