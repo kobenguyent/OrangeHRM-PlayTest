@@ -53,6 +53,7 @@ if (process.env.QASE_TOKEN) {
         project: 'ORANGEHRM',
         uploadAttachments: true,
         run: {
+          id: process.env.QASE_RUN_ID,
           complete: true,
         },
       },
