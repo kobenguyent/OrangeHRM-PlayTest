@@ -30,9 +30,11 @@ jobs:
       QASE_API_TOKEN: ${{ secrets.QASE_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: https://registry.npmjs.org/
@@ -40,16 +42,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install browsers
+      - name: Install Playwright browsers
         run: npx playwright install
 
-      - name: Create Qase test run
-        id: create_qase_run
+      - name: Create Qase test run via API
+        id: qase_create
         run: |
-          npx qase testrun create $QASE_PROJECT_CODE "CI Run $CI_BUILD_NUMBER" --env CI --title "CI Run"
-          echo "QASE_RUN_ID=$(cat .qase-run-id)" >> $GITHUB_ENV
+          RESPONSE=$(curl -s -X POST "https://api.qase.io/v1/run/$QASE_PROJECT_CODE" \
+            -H "Content-Type: application/json" \
+            -H "Token: $QASE_API_TOKEN" \
+            -d '{
+              "title": "CI Run ${{ env.CI_BUILD_NUMBER }}",
+              "is_autotest": true
+            }')
 
-      - name: Run Playwright tests with Allure + Qase
+          echo "Qase API response: $RESPONSE"
+          RUN_ID=$(echo "$RESPONSE" | jq -r '.result.id')
+
+          echo "QASE_RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "QASE_RUN_URL=https://app.qase.io/run/$QASE_PROJECT_CODE/dashboard/$RUN_ID" >> $GITHUB_ENV
+
+      - name: Run tests with Allure + Qase reporters
         run: |
           npm run test:chrome
           npm run allure:generate
@@ -57,10 +70,12 @@ jobs:
       - name: Complete Qase test run
         if: always()
         run: |
-          npx qase testrun complete $QASE_PROJECT_CODE $QASE_RUN_ID
-          echo "QASE_RUN_URL=https://app.qase.io/run/$QASE_PROJECT_CODE/dashboard/$QASE_RUN_ID" >> $GITHUB_ENV
+          curl -X PATCH \
+            -H "Token: $QASE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"status": 2}' \
+            "https://api.qase.io/v1/run/$QASE_PROJECT_CODE/$QASE_RUN_ID"
 
-      # Optional: Make the Qase run public
       - name: Make Qase run public
         if: always()
         run: |
