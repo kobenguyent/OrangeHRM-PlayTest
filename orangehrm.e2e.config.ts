@@ -57,7 +57,7 @@ if (process.env.QASE_TOKEN) {
         },
       },
     },
-  ]]
+  ],['allure-playwright', { outputFolder: 'my-allure-results' }]]
 }
 
 export default config
