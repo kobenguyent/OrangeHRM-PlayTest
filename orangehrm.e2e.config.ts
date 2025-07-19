@@ -14,7 +14,7 @@ const config: PlaywrightTestConfig = {
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
-  testDir: './tests',
+  testDir: 'tests',
   use: {
     headless: process.env.HEADED ? false : true,
     viewport: { width: 1280, height: 720 }, // set the viewport size
