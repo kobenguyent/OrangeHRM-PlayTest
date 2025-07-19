@@ -1,7 +1,7 @@
 
 # 🧪 OrangeHRM Playwright E2E Test Suite
 
-![E2E Tests](https://github.com/kobenguyent/OrangeHRM-PlayTest/actions/workflows/e2e.yml/badge.svg)
+![E2E Tests](https://github.com/kobenguyent/OrangeHRM-PlayTest/actions/workflows/e2e.tests.yml/badge.svg)
 [![Allure Report](https://img.shields.io/badge/Allure--Report-View-blue?logo=allure)](https://kobenguyent.github.io/OrangeHRM-PlayTest)
 
 End-to-end test automation for [OrangeHRM](https://opensource-demo.orangehrmlive.com/) using [Playwright](https://playwright.dev/).
