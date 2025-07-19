@@ -25,21 +25,51 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    env:
+      QASE_PROJECT_CODE: ORANGEHRM
+      QASE_API_TOKEN: ${{ secrets.QASE_TOKEN }}
+
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: https://registry.npmjs.org/
-      - name: install deps
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install browsers
+        run: npx playwright install
+
+      - name: Create Qase test run
+        id: create_qase_run
         run: |
-          npm i
-      - name: Run tests and generate allure reports
+          npx qase testrun create $QASE_PROJECT_CODE "CI Run $CI_BUILD_NUMBER" --env CI --title "CI Run"
+          echo "QASE_RUN_ID=$(cat .qase-run-id)" >> $GITHUB_ENV
+
+      - name: Run Playwright tests with Allure + Qase
         run: |
-          npm i && npx playwright install
-          npm run test:chrome ; npm run allure:generate
-        env:
-          QASE_TOKEN: ${{ secrets.QASE_TOKEN }}
+          npm run test:chrome
+          npm run allure:generate
+
+      - name: Complete Qase test run
+        if: always()
+        run: |
+          npx qase testrun complete $QASE_PROJECT_CODE $QASE_RUN_ID
+          echo "QASE_RUN_URL=https://app.qase.io/run/$QASE_PROJECT_CODE/dashboard/$QASE_RUN_ID" >> $GITHUB_ENV
+
+      # Optional: Make the Qase run public
+      - name: Make Qase run public
+        if: always()
+        run: |
+          curl -X PATCH \
+            -H "Token: $QASE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"is_public": true}' \
+            "https://api.qase.io/v1/run/$QASE_PROJECT_CODE/$QASE_RUN_ID"
+
       - name: Get Allure history
         uses: actions/checkout@v2
         if: always()
