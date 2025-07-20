@@ -49,7 +49,7 @@ npx allure open ./allure-report
 📊 Allure Report (Hosted)
 
 View the latest test results here:
-🔗 Allure Report (GitHub Pages)
+🔗 [Allure Report](https://kobenguyent.github.io/OrangeHRM-PlayTest)
 
 ⸻
 
@@ -58,16 +58,19 @@ View the latest test results here:
 This project uses GitHub Actions to run tests on every push to main and generate Allure reports.
 
 The CI workflow:
+
 	•	Installs dependencies
 	•	Runs all Playwright tests
 	•	Publishes Allure report to the gh-pages branch
 
-See the workflow file in .github/workflows/e2e.tests.yml.
+See the workflow file in 
+.github/workflows/e2e.tests.yml.
 
 ⸻
 
 🧩 Technologies Used
-	•	🎭 Playwright
+
+	•	🎭 Playwrigh
 	•	🧪 Playwright Test Runner
 	•	🧱 Page Object Model
 	•	📊 Allure Reports
@@ -76,6 +79,7 @@ See the workflow file in .github/workflows/e2e.tests.yml.
 ⸻
 
 📌 Todo
+
 	•	Add more coverage for other modules
 	•	Integrate with a test data service or API mocks
 	•	Improve cross-browser test matrix
