@@ -76,25 +76,56 @@ jobs:
             -d '{"status": 2}' \
             "https://api.qase.io/v1/run/$QASE_PROJECT_CODE/$QASE_RUN_ID"
 
-      - name: Make Qase run public
+      - name: Make Qase run public and extract public link
+        id: qase_public
         if: always()
         run: |
-          curl -X PATCH \
+          RESPONSE=$(curl -s -X PATCH \
             -H "Token: $QASE_API_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{"status": true}' \
-            "https://api.qase.io/v1/run/$QASE_PROJECT_CODE/$QASE_RUN_ID/public"
+            "https://api.qase.io/v1/run/$QASE_PROJECT_CODE/$QASE_RUN_ID/public")
+
+          echo "Public API response: $RESPONSE"
+          PUBLIC_URL=$(echo "$RESPONSE" | jq -r '.result.url')
+          echo "QASE_PUBLIC_URL=$PUBLIC_URL" >> $GITHUB_ENV
+          echo "QASE_PUBLIC_URL=$PUBLIC_URL" >> $GITHUB_OUTPUT
 
       - name: Update Qase badge in README.md
         if: always()
         run: |
-          # Replace Qase badge link in README
-          sed -i "s|https://app.qase.io/run/$QASE_PROJECT_CODE/dashboard/[0-9]*|https://app.qase.io/run/$QASE_PROJECT_CODE/dashboard/$QASE_RUN_ID|" README.md
+          # Replace Qase badge link in README with new public URL
+          sed -i "s|https://app.qase.io/public/report/[a-zA-Z0-9]*|${{ steps.qase_public.outputs.QASE_PUBLIC_URL }}|" README.md
 
           git config --global user.email "kobenguyent@gmail.com"
           git config --global user.name "kobet"
           git add README.md
-          git commit -m "Update Qase badge to run $QASE_RUN_ID" || echo "No changes to commit"
+          git commit -m "Update Qase badge to latest public run" || echo "No changes to commit"
+          git push origin HEAD:master
+
+      - name: Get Allure history
+        uses: actions/checkout@v2
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Allure Report action
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          allure_results: allure-results
+          allure_history: allure-history/allure-history
+          keep_reports: 5
+
+      - name: Deploy report to Github Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v2
+        env:
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: allure-history/allure-history(
           git push origin HEAD:main
 
       - name: Get Allure history
