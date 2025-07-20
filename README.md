@@ -3,7 +3,7 @@
 
 ![E2E Tests](https://github.com/kobenguyent/OrangeHRM-PlayTest/actions/workflows/e2e.tests.yml/badge.svg)
 [![Allure Report](https://img.shields.io/badge/Allure--Report-View-blue?logo=allure)](https://kobenguyent.github.io/OrangeHRM-PlayTest)
-[![Qase Test Run](https://img.shields.io/badge/Qase-Test%20Run-blue?logo=data:image/png;base64,iVBORw0KGgo)](https://app.qase.io/public/report/f3caf99c7ea76a3dd26ea5ed74b744e10b001026)
+[![Qase Test Run](https://img.shields.io/badge/Qase-Test%20Run-blue?logo=data:image/png;base64,iVBORw0KGgo)](https://app.qase.io/public/report/adb5c9b45d87cc8e250b235c88383fbbf92781ac)
 
 End-to-end test automation for [OrangeHRM](https://opensource-demo.orangehrmlive.com/) using [Playwright](https://playwright.dev/).
 
